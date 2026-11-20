@@ -1,0 +1,53 @@
+:root {
+  color-scheme: dark;
+
+  --avs-bg: #0b0f17;
+  --avs-surface: #121826;
+  --avs-surface-raised: #1a2233;
+  --avs-border: #263046;
+  --avs-text: #e8ecf4;
+  --avs-text-muted: #9aa5bd;
+
+  --avs-accent-cyan: #00e5ff;
+  --avs-accent-magenta: #ff2bd6;
+  --avs-alert-red: #ff3b4e;
+  --avs-success: #2be38a;
+
+  --avs-radius: 14px;
+  --avs-radius-sm: 10px;
+  --avs-touch-min: 44px;
+
+  --avs-space-1: clamp(4px, 0.5vw, 6px);
+  --avs-space-2: clamp(8px, 1vw, 12px);
+  --avs-space-3: clamp(12px, 1.6vw, 18px);
+  --avs-space-4: clamp(16px, 2.4vw, 28px);
+  --avs-space-5: clamp(24px, 3.6vw, 44px);
+
+  --avs-font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Devanagari", sans-serif;
+  --avs-text-sm: clamp(0.875rem, 0.84rem + 0.2vw, 1rem);
+  --avs-text-md: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
+  --avs-text-lg: clamp(1.25rem, 1.1rem + 0.8vw, 1.75rem);
+  --avs-text-xl: clamp(1.75rem, 1.4rem + 1.8vw, 2.75rem);
+}
+
+/* Red alert for empty required slots. The border is always visible,
+   the blink only runs when the user has not asked for reduced motion. */
+.avs-alert {
+  border: 2px solid var(--avs-alert-red);
+}
+
+@keyframes avs-alert-blink {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 59, 78, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(255, 59, 78, 0.5);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .avs-alert {
+    animation: avs-alert-blink 0.9s ease-in-out 4;
+  }
+}
