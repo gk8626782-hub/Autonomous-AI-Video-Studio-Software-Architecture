@@ -99,6 +99,8 @@ export interface TextOutput {
   readonly text: string;
   readonly inputTokens?: number;
   readonly outputTokens?: number;
+    /** "length" means the model stopped because it hit the token limit. */
+  readonly finishReason?: "stop" | "length" | "other";
 }
 
 export interface MediaOutput {
