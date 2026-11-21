@@ -53,6 +53,7 @@ function buildOutput(request: GenerationRequest): GenerationOutput {
         text: `mock:${request.prompt}`,
         inputTokens: Math.ceil(request.prompt.length / 4),
         outputTokens: 8,
+                finishReason: "stop",
       };
     case "image":
       return {
