@@ -20,7 +20,14 @@ describe("validateManifest", () => {
   });
 
   it("reports a bad id, empty name and missing capabilities", () => {
-    const problems = validateManifest({ ...valid, id: "Bad Id", displayName: " ", capabilities: [] });
+        const problems = validateManifest({
+      ...valid,
+      id: "Bad Id",
+      displayName: " ",
+      capabilities: [],
+      limits: {},
+      costs: {},
+    });
     expect(problems).toHaveLength(3);
   });
 
