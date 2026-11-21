@@ -5,9 +5,11 @@ import { providerError } from "./errors";
 import { CAPABILITIES } from "./types";
 import type {
   AdapterContext,
+  AdapterLimits,
   AdapterManifest,
   Capability,
   CostEstimate,
+  CostModel,
   GenerationOutput,
   GenerationRequest,
   JobHandle,
@@ -26,6 +28,21 @@ interface MockJob {
   readonly request: GenerationRequest;
   polls: number;
   cancelled: boolean;
+}
+
+/** Keeps only the entries of a per-capability map that the adapter actually supports. */
+function pick<T>(
+  source: Partial<Record<Capability, T>>,
+  keep: ReadonlySet<Capability>,
+): Partial<Record<Capability, T>> {
+  const result: Partial<Record<Capability, T>> = {};
+  for (const capability of CAPABILITIES) {
+    const value = source[capability];
+    if (value !== undefined && keep.has(capability)) {
+      result[capability] = value;
+    }
+  }
+  return result;
 }
 
 function buildOutput(request: GenerationRequest): GenerationOutput {
@@ -87,22 +104,32 @@ export class MockAdapter implements ProviderAdapter {
 
   constructor(options: MockAdapterOptions = {}) {
     this.pollsBeforeDone = options.pollsBeforeDone ?? 1;
+
+    const capabilities = options.capabilities ?? CAPABILITIES;
+    const supported: ReadonlySet<Capability> = new Set(capabilities);
+
     this.manifest = {
       id: options.id ?? "mock",
       displayName: "Mock provider",
-      capabilities: options.capabilities ?? CAPABILITIES,
+      capabilities,
       browserCallable: true,
-      limits: {
-        video: { maxDurationSec: 10, aspectRatios: ["16:9", "9:16"], resolutions: ["1080p"] },
-        image: { maxReferenceImages: 4 },
-      },
-      costs: {
-        text: { unit: "per_1k_tokens", priceUsd: 0.001 },
-        image: { unit: "per_image", priceUsd: 0.04 },
-        video: { unit: "per_second", priceUsd: 0.5 },
-        voice: { unit: "per_1k_chars", priceUsd: 0.2 },
-        music: { unit: "per_second", priceUsd: 0.01 },
-      },
+      limits: pick<AdapterLimits>(
+        {
+          video: { maxDurationSec: 10, aspectRatios: ["16:9", "9:16"], resolutions: ["1080p"] },
+          image: { maxReferenceImages: 4 },
+        },
+        supported,
+      ),
+      costs: pick<CostModel>(
+        {
+          text: { unit: "per_1k_tokens", priceUsd: 0.001 },
+          image: { unit: "per_image", priceUsd: 0.04 },
+          video: { unit: "per_second", priceUsd: 0.5 },
+          voice: { unit: "per_1k_chars", priceUsd: 0.2 },
+          music: { unit: "per_second", priceUsd: 0.01 },
+        },
+        supported,
+      ),
       features: {
         referenceImages: true,
         seed: true,
