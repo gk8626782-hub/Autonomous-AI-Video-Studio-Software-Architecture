@@ -166,6 +166,8 @@ export interface JobRecord {
   providerJobId: string | null;
   idempotencyKey: string;
   error: { code: string; messageKey: string } | null;
+    /** Output of a finished job. Must be JSON-serializable. Media is referenced by MediaRef id. */
+  result?: unknown;
   nextRunAt: number | null;
   createdAt: number;
   updatedAt: number;
