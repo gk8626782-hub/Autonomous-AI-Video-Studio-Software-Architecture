@@ -39,7 +39,7 @@ describe("isRetryableError", () => {
 });
 
 describe("withRetry", () => {
-  const sleep = vi.fn(async () => undefined);
+    const sleep = vi.fn(async (_ms: number): Promise<void> => undefined);
 
   it("returns the first successful result", async () => {
     const fn = vi.fn(async () => "ok");
