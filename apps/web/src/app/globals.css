@@ -30,12 +30,50 @@ h2 {
   font-size: var(--avs-text-lg);
 }
 
+h3 {
+  margin: 0;
+  font-size: var(--avs-text-md);
+}
+
+.subhead {
+  margin: 0;
+  font-size: var(--avs-text-sm);
+  color: var(--avs-text-muted);
+  font-weight: 600;
+}
+
 .muted {
   color: var(--avs-text-muted);
   font-size: var(--avs-text-sm);
   margin: var(--avs-space-1) 0 0;
 }
 
+.ok {
+  color: var(--avs-success);
+  font-size: var(--avs-text-sm);
+  margin: var(--avs-space-1) 0 0;
+}
+
+.warn {
+  color: #ffb020;
+  font-size: var(--avs-text-sm);
+  margin: var(--avs-space-1) 0 0;
+}
+
+.error {
+  margin: 0;
+  color: var(--avs-alert-red);
+}
+
+.notice {
+  margin: 0;
+  padding: var(--avs-space-2) var(--avs-space-3);
+  border: 1px solid var(--avs-accent-cyan);
+  border-radius: var(--avs-radius-sm);
+  color: var(--avs-text);
+}
+
+.shell,
 .home {
   display: grid;
   gap: var(--avs-space-4);
@@ -44,11 +82,52 @@ h2 {
   padding: var(--avs-space-4);
 }
 
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--avs-space-3);
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--avs-space-3);
+}
+
+.locale-switch {
+  display: flex;
+  gap: var(--avs-space-1);
+}
+
 .card {
   background: var(--avs-surface);
   border: 1px solid var(--avs-border);
   border-radius: var(--avs-radius);
   padding: var(--avs-space-4);
+}
+
+.card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--avs-space-3);
+}
+
+.section {
+  display: grid;
+  gap: var(--avs-space-3);
+  background: var(--avs-surface);
+  border: 1px solid var(--avs-border);
+  border-radius: var(--avs-radius);
+  padding: var(--avs-space-4);
+}
+
+.section-title {
+  margin: 0;
+  font-size: var(--avs-text-lg);
 }
 
 .form {
@@ -71,9 +150,120 @@ h2 {
   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
 }
 
+.grid-wide {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+}
+
+.character-card,
+.environment-card {
+  display: grid;
+  gap: var(--avs-space-3);
+  align-content: start;
+}
+
+.views-grid {
+  display: grid;
+  gap: var(--avs-space-3);
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+}
+
+.slot {
+  display: grid;
+  gap: var(--avs-space-2);
+  align-content: start;
+  padding: var(--avs-space-3);
+  border: 1px dashed var(--avs-border);
+  border-radius: var(--avs-radius-sm);
+  background: var(--avs-surface-raised);
+}
+
+.slot-label {
+  font-size: var(--avs-text-sm);
+  color: var(--avs-text-muted);
+}
+
+.slot-image {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  border-radius: var(--avs-radius-sm);
+  background: var(--avs-bg);
+}
+
+.slot-wide .slot-image {
+  aspect-ratio: 2 / 1;
+}
+
+.slot-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.slot-empty {
+  color: var(--avs-text-muted);
+  font-size: var(--avs-text-sm);
+}
+
+.slot-missing {
+  margin: 0;
+  padding: var(--avs-space-2);
+  text-align: center;
+  color: var(--avs-alert-red);
+  font-size: var(--avs-text-sm);
+}
+
+.slot-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--avs-space-2);
+}
+
+/* The red alert keeps a solid red border while it blinks, whatever the slot's normal border is. */
+.slot.avs-alert,
+.section.avs-alert {
+  border: 2px solid var(--avs-alert-red);
+}
+
+.validation {
+  display: grid;
+  gap: var(--avs-space-3);
+}
+
+.issue-list {
+  display: grid;
+  gap: var(--avs-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+button.issue {
+  width: 100%;
+  text-align: start;
+  border-color: var(--avs-alert-red);
+  color: var(--avs-text);
+}
+
+button.generate {
+  width: 100%;
+  background: var(--avs-accent-cyan);
+  border-color: var(--avs-accent-cyan);
+  color: #04141a;
+  font-weight: 700;
+}
+
+button.generate.locked {
+  background: var(--avs-surface-raised);
+  border-color: var(--avs-alert-red);
+  color: var(--avs-text-muted);
+}
+
 input,
 select,
-button {
+button,
+.link-button {
   min-height: var(--avs-touch-min);
   border-radius: var(--avs-radius-sm);
   border: 1px solid var(--avs-border);
@@ -83,26 +273,53 @@ button {
   padding: 0 var(--avs-space-3);
 }
 
+.link-button {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
 button {
   cursor: pointer;
 }
 
-button.primary {
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.primary,
+.link-button.primary {
   background: var(--avs-accent-cyan);
   border-color: var(--avs-accent-cyan);
   color: #04141a;
   font-weight: 600;
 }
 
-input:focus-visible,
-select:focus-visible,
-button:focus-visible {
-  outline: 2px solid var(--avs-accent-magenta);
-  outline-offset: 2px;
+button.danger {
+  border-color: var(--avs-alert-red);
+  color: var(--avs-alert-red);
 }
 
-.error {
-  grid-column: 1 / -1;
-  margin: 0;
-  color: var(--avs-alert-red);
+.chip {
+  border-radius: 999px;
+}
+
+.chip.active {
+  background: var(--avs-accent-cyan);
+  border-color: var(--avs-accent-cyan);
+  color: #04141a;
+  font-weight: 600;
+}
+
+audio {
+  width: 100%;
+}
+
+input:focus-visible,
+select:focus-visible,
+button:focus-visible,
+.link-button:focus-visible {
+  outline: 2px solid var(--avs-accent-magenta);
+  outline-offset: 2px;
 }
