@@ -5,7 +5,14 @@ const nextConfig = {
   trailingSlash: true,
   images: { unoptimized: true },
   reactStrictMode: true,
-  transpilePackages: ["@avs/core", "@avs/storage", "@avs/ui"],
+  transpilePackages: [
+    "@avs/board",
+    "@avs/core",
+    "@avs/i18n",
+    "@avs/providers",
+    "@avs/storage",
+    "@avs/ui",
+  ],
 };
 
 export default nextConfig;
