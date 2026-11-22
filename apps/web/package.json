@@ -5,20 +5,26 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
   },
   "dependencies": {
+    "@avs/board": "workspace:*",
     "@avs/core": "workspace:*",
+    "@avs/i18n": "workspace:*",
+    "@avs/providers": "workspace:*",
     "@avs/storage": "workspace:*",
     "@avs/ui": "workspace:*",
     "next": "^15.0.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "zustand": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4"
   }
 }
