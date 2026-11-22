@@ -124,6 +124,8 @@ export interface ShotRecord {
   motion: string;
   /** MediaRefRecord id of the generated clip. */
   clipRef: string | null;
+    /** The full director plan for this shot (camera, lines, prompt). Shape is defined by @avs/director. */
+  plan?: unknown;
 }
 
 export type MediaKind = "image" | "clip" | "audio" | "panorama" | "segment" | "export";
