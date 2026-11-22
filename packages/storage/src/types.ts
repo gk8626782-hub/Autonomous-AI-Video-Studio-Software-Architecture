@@ -75,6 +75,8 @@ export interface CharacterRecord {
   appearance: string;
   voiceTraits: string;
   viewSlots: CharacterViewSlots;
+  /** True once the user approved the whole set of views. A locked set cannot be changed. */
+  viewsLocked?: boolean;
   voiceSlot: VoiceSlot;
 }
 
@@ -82,6 +84,8 @@ export interface EnvironmentRecord {
   id: string;
   projectId: string;
   name: string;
+  /** Description used to generate the panorama. */
+  description?: string;
   mode: "upload" | "ai" | null;
   /** MediaRefRecord id of the 2:1 equirectangular panorama. */
   panoramaRef: string | null;
@@ -166,7 +170,7 @@ export interface JobRecord {
   providerJobId: string | null;
   idempotencyKey: string;
   error: { code: string; messageKey: string } | null;
-    /** Output of a finished job. Must be JSON-serializable. Media is referenced by MediaRef id. */
+  /** Output of a finished job. Must be JSON-serializable. Media is referenced by MediaRef id. */
   result?: unknown;
   nextRunAt: number | null;
   createdAt: number;
