@@ -26,3 +26,6 @@ jobs:
 
       - name: Test
         run: pnpm test
+
+      - name: Build web app
+        run: pnpm build
