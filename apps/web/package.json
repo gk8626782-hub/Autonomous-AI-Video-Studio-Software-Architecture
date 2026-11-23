@@ -12,6 +12,7 @@
     "@avs/board": "workspace:*",
     "@avs/core": "workspace:*",
     "@avs/i18n": "workspace:*",
+    "@avs/keys": "workspace:*",
     "@avs/providers": "workspace:*",
     "@avs/storage": "workspace:*",
     "@avs/ui": "workspace:*",
