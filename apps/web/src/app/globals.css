@@ -323,3 +323,35 @@ button:focus-visible,
   outline: 2px solid var(--avs-accent-magenta);
   outline-offset: 2px;
 }
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--avs-space-2);
+}
+
+.stack {
+  display: grid;
+  gap: var(--avs-space-3);
+}
+
+.provider-card {
+  display: grid;
+  gap: var(--avs-space-3);
+  align-content: start;
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px var(--avs-space-2);
+  border: 1px solid var(--avs-border);
+  border-radius: 999px;
+  font-size: var(--avs-text-sm);
+  color: var(--avs-text-muted);
+  white-space: nowrap;
+}
+
+.badge.ok {
+  border-color: var(--avs-success);
+  color: var(--avs-success);
+}
