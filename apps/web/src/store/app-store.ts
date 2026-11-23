@@ -4,9 +4,11 @@ import type { Locale } from "@avs/i18n";
 import type { Capability } from "@avs/providers";
 import type { CharacterRecord, EnvironmentRecord, MediaStatus, StorageLevel } from "@avs/storage";
 
+export type VaultUiState = "unknown" | "none" | "locked" | "unlocked";
+
 /**
  * App state. Every field and action starts with its namespace prefix
- * (ui_, story_, char_, env_, media_, device_, ai_). See @avs/core namespaces.
+ * (ui_, story_, char_, env_, media_, device_, ai_, vault_). See @avs/core namespaces.
  */
 export interface AppState {
   // ui
@@ -45,6 +47,12 @@ export interface AppState {
   ai_configured: Capability[];
   ai_required: Capability[];
   ai_setConfigured: (capabilities: Capability[]) => void;
+
+  // vault
+  vault_state: VaultUiState;
+  /** Names of the secrets in the vault. Never the secrets themselves. */
+  vault_secretNames: string[];
+  vault_set: (state: VaultUiState, secretNames: string[]) => void;
 }
 
 export const useAppStore = create<AppState>()((set) => ({
@@ -78,4 +86,8 @@ export const useAppStore = create<AppState>()((set) => ({
   ai_configured: [],
   ai_required: ["text", "image", "voice"],
   ai_setConfigured: (capabilities) => set({ ai_configured: capabilities }),
+
+  vault_state: "unknown",
+  vault_secretNames: [],
+  vault_set: (state, secretNames) => set({ vault_state: state, vault_secretNames: secretNames }),
 }));
