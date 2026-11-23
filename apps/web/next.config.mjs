@@ -8,7 +8,9 @@ const nextConfig = {
   transpilePackages: [
     "@avs/board",
     "@avs/core",
+    "@avs/crypto",
     "@avs/i18n",
+    "@avs/keys",
     "@avs/providers",
     "@avs/storage",
     "@avs/ui",
