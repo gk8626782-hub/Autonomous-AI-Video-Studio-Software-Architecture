@@ -65,7 +65,12 @@ export default function HomePage() {
           <h1>{t("ui.app.name")}</h1>
           <p className="muted">{t("ui.home.subtitle")}</p>
         </div>
-        <LocaleSwitch />
+                <div className="topbar-actions">
+          <Link href="/settings/" className="link-button">
+            {t("ui.nav.settings")}
+          </Link>
+          <LocaleSwitch />
+        </div>
       </header>
 
       <form className="card form" onSubmit={(event) => void handleCreate(event)}>
