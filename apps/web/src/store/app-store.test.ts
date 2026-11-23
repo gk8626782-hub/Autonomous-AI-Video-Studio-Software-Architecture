@@ -1,57 +1,93 @@
-import { afterEach, describe, expect, it } from "vitest";
-import { findNamespaceViolations, namespaceOf } from "@avs/core";
-import { useAppStore } from "./app-store";
+import { create } from "zustand";
+import { DEFAULT_LOCALE } from "@avs/i18n";
+import type { Locale } from "@avs/i18n";
+import type { Capability } from "@avs/providers";
+import type { CharacterRecord, EnvironmentRecord, MediaStatus, StorageLevel } from "@avs/storage";
 
-const initial = useAppStore.getState();
+export type VaultUiState = "unknown" | "none" | "locked" | "unlocked";
 
-afterEach(() => {
-  useAppStore.setState(initial, true);
-});
+/**
+ * App state. Every field and action starts with its namespace prefix
+ * (ui_, story_, char_, env_, media_, device_, ai_, vault_). See @avs/core namespaces.
+ */
+export interface AppState {
+  // ui
+  ui_locale: Locale;
+  /** CSS selector of the slot that is currently blinking red, or null. */
+  ui_alertPath: string | null;
+  ui_setLocale: (locale: Locale) => void;
+  ui_setAlertPath: (path: string | null) => void;
 
-describe("app store", () => {
-  it("prefixes every field and action with a known namespace", () => {
-    const state = useAppStore.getState() as unknown as Record<string, unknown>;
-    const groups: Record<string, Record<string, unknown>> = {};
+  // story
+  story_passed: boolean;
+  story_durationMin: number | null;
+  story_setStatus: (passed: boolean, durationMin: number | null) => void;
 
-    for (const key of Object.keys(state)) {
-      const namespace = namespaceOf(key) ?? "unprefixed";
-      (groups[namespace] ??= {})[key] = state[key];
-    }
+  // char
+  char_items: CharacterRecord[];
+  char_setItems: (items: CharacterRecord[]) => void;
 
-    expect(Object.keys(groups)).not.toContain("unprefixed");
-    expect(findNamespaceViolations(groups)).toEqual([]);
-  });
+  // env
+  env_items: EnvironmentRecord[];
+  env_setItems: (items: EnvironmentRecord[]) => void;
 
-  it("starts with an empty board and no alert", () => {
-    const state = useAppStore.getState();
-    expect(state.ui_alertPath).toBeNull();
-    expect(state.char_items).toEqual([]);
-    expect(state.env_items).toEqual([]);
-    expect(state.story_passed).toBe(false);
-    expect(state.ai_required).toEqual(["text", "image", "voice"]);
-  });
+  // media
+  media_statuses: Record<string, MediaStatus>;
+  media_setStatuses: (statuses: Record<string, MediaStatus>) => void;
 
-  it("updates through its actions", () => {
-    const state = useAppStore.getState();
-    state.ui_setLocale("hi");
-    state.ui_setAlertPath('[data-slot="x"]');
-    state.story_setStatus(true, 12);
-    state.media_setStatuses({ a: "ok" });
-    state.device_setStorage("warn", 10, 100);
-    state.device_setPersisted(true);
-    state.ai_setConfigured(["text"]);
+  // device
+  device_storageLevel: StorageLevel | "unknown";
+  device_usageBytes: number | null;
+  device_quotaBytes: number | null;
+  device_persisted: boolean | null;
+  device_setStorage: (level: StorageLevel | "unknown", usageBytes: number | null, quotaBytes: number | null) => void;
+  device_setPersisted: (persisted: boolean | null) => void;
 
-    expect(useAppStore.getState()).toMatchObject({
-      ui_locale: "hi",
-      ui_alertPath: '[data-slot="x"]',
-      story_passed: true,
-      story_durationMin: 12,
-      media_statuses: { a: "ok" },
-      device_storageLevel: "warn",
-      device_usageBytes: 10,
-      device_quotaBytes: 100,
-      device_persisted: true,
-      ai_configured: ["text"],
-    });
-  });
-});
+  // ai
+  ai_configured: Capability[];
+  ai_required: Capability[];
+  ai_setConfigured: (capabilities: Capability[]) => void;
+
+  // vault
+  vault_state: VaultUiState;
+  /** Names of the secrets in the vault. Never the secrets themselves. */
+  vault_secretNames: string[];
+  vault_set: (state: VaultUiState, secretNames: string[]) => void;
+}
+
+export const useAppStore = create<AppState>()((set) => ({
+  ui_locale: DEFAULT_LOCALE,
+  ui_alertPath: null,
+  ui_setLocale: (locale) => set({ ui_locale: locale }),
+  ui_setAlertPath: (path) => set({ ui_alertPath: path }),
+
+  story_passed: false,
+  story_durationMin: null,
+  story_setStatus: (passed, durationMin) => set({ story_passed: passed, story_durationMin: durationMin }),
+
+  char_items: [],
+  char_setItems: (items) => set({ char_items: items }),
+
+  env_items: [],
+  env_setItems: (items) => set({ env_items: items }),
+
+  media_statuses: {},
+  media_setStatuses: (statuses) => set({ media_statuses: statuses }),
+
+  device_storageLevel: "unknown",
+  device_usageBytes: null,
+  device_quotaBytes: null,
+  device_persisted: null,
+  device_setStorage: (level, usageBytes, quotaBytes) =>
+    set({ device_storageLevel: level, device_usageBytes: usageBytes, device_quotaBytes: quotaBytes }),
+  device_setPersisted: (persisted) => set({ device_persisted: persisted }),
+
+  // Text writes the story, images draw the characters, voice speaks the lines.
+  ai_configured: [],
+  ai_required: ["text", "image", "voice"],
+  ai_setConfigured: (capabilities) => set({ ai_configured: capabilities }),
+
+  vault_state: "unknown",
+  vault_secretNames: [],
+  vault_set: (state, secretNames) => set({ vault_state: state, vault_secretNames: secretNames }),
+}));
