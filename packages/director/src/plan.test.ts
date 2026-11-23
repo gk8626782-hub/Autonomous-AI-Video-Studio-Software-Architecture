@@ -73,7 +73,7 @@ describe("planDirector", () => {
     expect(lines.filter((line) => line.speakerId === "c-asha")).toHaveLength(2);
     expect(lines.filter((line) => line.speakerId === "c-ravi")).toHaveLength(1);
     expect(lines.filter((line) => line.kind === "narration").every((line) => line.speakerId === null)).toBe(true);
-    expect(plan.scenes[0]?.characterIds.sort()).toEqual(["c-asha", "c-ravi"]);
+        expect([...(plan.scenes[0]?.characterIds ?? [])].sort()).toEqual(["c-asha", "c-ravi"]);
   });
 
   it("makes the scene last exactly as long as planned when the text is shorter", () => {
