@@ -1,6 +1,7 @@
 import { BoardService, createBrowserImageCodec } from "@avs/board";
 import type { ImageCodec } from "@avs/board";
-import { MediaService, OpfsFileStore } from "@avs/storage";
+import { VaultManager } from "@avs/keys";
+import { MediaService, OpfsFileStore, VaultStore } from "@avs/storage";
 import type { FileStore } from "@avs/storage";
 import { getDatabase } from "./db";
 
@@ -9,6 +10,7 @@ export interface Services {
   readonly media: MediaService;
   readonly board: BoardService;
   readonly codec: ImageCodec;
+  readonly vault: VaultManager;
 }
 
 let services: Services | undefined;
@@ -23,6 +25,7 @@ export function getServices(): Services {
       media: new MediaService(db, files),
       board: new BoardService(db),
       codec: createBrowserImageCodec(),
+      vault: new VaultManager(new VaultStore(db)),
     };
   }
   return services;
