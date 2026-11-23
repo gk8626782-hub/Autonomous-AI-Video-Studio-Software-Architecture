@@ -2,37 +2,19 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import type { ReactNode } from "react";
 import { GENERATE_SCOPE } from "@avs/board";
 import { useBoardController } from "../lib/board-controller";
 import { useT } from "../lib/i18n";
+import { useProviderStatus } from "../lib/provider-status";
 import { useAppStore } from "../store/app-store";
 import { AddCharacterForm } from "./AddCharacterForm";
 import { AddEnvironmentForm } from "./AddEnvironmentForm";
 import { CharacterCard } from "./CharacterCard";
 import { EnvironmentCard } from "./EnvironmentCard";
-import { LocaleSwitch } from "./LocaleSwitch";
+import { ScreenShell } from "./ScreenShell";
 import { Section } from "./Section";
 import { StoragePanel } from "./StoragePanel";
 import { ValidationPanel } from "./ValidationPanel";
-
-function ScreenShell({ title, children }: { readonly title: string; readonly children: ReactNode }) {
-  const t = useT();
-  return (
-    <main className="shell">
-      <header className="topbar">
-        <div className="topbar-left">
-          <Link href="/" className="link-button">
-            {t("ui.action.back")}
-          </Link>
-          <h1>{title}</h1>
-        </div>
-        <LocaleSwitch />
-      </header>
-      {children}
-    </main>
-  );
-}
 
 interface ProjectScreenProps {
   readonly projectId: string | null;
@@ -44,6 +26,8 @@ export function ProjectScreen({ projectId }: ProjectScreenProps) {
   const controller = useBoardController(projectId);
   const state = useAppStore();
   const [launchNotice, setLaunchNotice] = useState<string | null>(null);
+
+  useProviderStatus();
 
   const alertPath = state.ui_alertPath;
   const setAlertPath = state.ui_setAlertPath;
@@ -154,7 +138,18 @@ export function ProjectScreen({ projectId }: ProjectScreenProps) {
       </Section>
 
       <Section name="providers" title={t("ui.project.section.providers")}>
-        <p className="muted">{t("ui.providers.none")}</p>
+        <p className="muted">
+          {state.ai_configured.length === 0
+            ? t("ui.providers.noneYet")
+            : t("ui.providers.capabilities", {
+                list: state.ai_configured.map((capability) => t(`ui.capability.${capability}`)).join(", "),
+              })}
+        </p>
+        <div className="slot-actions">
+          <Link href="/settings/" className="link-button">
+            {t("ui.nav.settings")}
+          </Link>
+        </div>
       </Section>
 
       <Section name="storage" title={t("ui.project.section.storage")}>
